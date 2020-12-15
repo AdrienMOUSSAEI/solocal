@@ -38,7 +38,7 @@ services:
     #command: php bin/console doctrine:migrations:migrate --no-interaction
     #command: php bin/console --no-interaction doctrine:migrations:migrate -n
     ports:
-      - "30:80"
+      - "40:80"
     links:
       - mysql-solocal
     # Database must be ready before running this searvice
@@ -54,7 +54,7 @@ services:
     links:
       - mysql-solocal:mysql-solocal
     ports:
-      - "31:80"
+      - "41:80"
     networks:
       - solocal
     restart: always
