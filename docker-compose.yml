@@ -27,15 +27,12 @@ services:
     image: whatwedo/symfony4:v2.0
     # php7.2
     # image: whatwedo/symfony4
-    #build:
-    #  context: .
-    #  dockerfile: Dockerfile
     environment:
-      DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
+        DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
     volumes:
     - ./app:/var/www
     # Commande du batch
-    #command: php bin/console doctrine:migrations:migrate --no-interaction
+    #command: composer install
     #command: php bin/console --no-interaction doctrine:migrations:migrate -n
     ports:
       - "40:80"
