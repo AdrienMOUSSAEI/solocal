@@ -33,7 +33,7 @@ services:
     - ./app:/var/www
     # Commande du batch
     #command: composer install
-    command: php bin/console --no-interaction doctrine:migrations:migrate -n
+    #command: php bin/console --no-interaction doctrine:migrations:migrate -n
     ports:
       - "40:80"
     links:
