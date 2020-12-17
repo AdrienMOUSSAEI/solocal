@@ -7,6 +7,9 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
@@ -71,6 +74,15 @@ class Product
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $color;
+    
+    /**
+     * @var UploadsPhotos|null
+     *
+     * @ORM\ManyToOne(targetEntity=UploadsPhotos::class)
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/image")
+     */
+    public $imageFile;    
 
     public function getId(): ?int
     {
