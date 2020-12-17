@@ -5,9 +5,12 @@ namespace App\Entity;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ApiResource()
+ * @ApiResource(iri="http://schema.org/Article")
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
@@ -68,6 +71,15 @@ class Article
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $color;
+    
+    /**
+     * @var MediaObject|null
+     *
+     * @ORM\ManyToOne(targetEntity=MediaObject::class)
+     * @ORM\JoinColumn(nullable=true)
+     * @ApiProperty(iri="http://schema.org/imageFile")
+     */
+    public $imageFile;
 
     public function getId(): ?int
     {

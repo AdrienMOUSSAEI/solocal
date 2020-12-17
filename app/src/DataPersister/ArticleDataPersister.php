@@ -31,11 +31,11 @@ class ArticleDataPersister implements DataPersisterInterface
      */
     public function persist($data)
     {
-        if(!empty($data->getImage())){
+        //if(!empty($data->getImage())){
             /** Service UploaderHelper */
-            $newFileName = $this->uploaderHelper->UploadArticleImage($data->getImage());
-            $data->setImage($newFileName); 
-        }
+        //    $newFileName = $this->uploaderHelper->UploadArticleImage($data->getImage());
+        //    $data->setImage($newFileName); 
+        //}
         $this->_entityManager->persist($data);
         $this->_entityManager->flush();
     }
