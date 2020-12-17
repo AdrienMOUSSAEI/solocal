@@ -1,6 +1,5 @@
 version: '3.0'
 services:
-
   mysql-solocal:
     container_name: mysql-solocal
     image: mysql:5.7
@@ -9,8 +8,6 @@ services:
       MYSQL_DATABASE: solocal  # Database will be created on start
       MYSQL_USER: solocal    # Password for MySQL User. 
       MYSQL_PASSWORD: solocal
-    # We need to run healthcheck because we need to make sure that the initial & default
-    # database has been created
     healthcheck:
       test: "/usr/bin/mysql --user=root --password=solocal --execute \"SHOW DATABASES;\""
       interval: 2s
@@ -20,31 +17,7 @@ services:
     - ./db:/var/lib/mysql
     networks:
       - solocal
-
-  symfony-solocal:
-    container_name: symfony-solocal
-    # php7.3
-    image: whatwedo/symfony4:v2.0
-    # php7.2
-    # image: whatwedo/symfony4
-    environment:
-        DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
-    volumes:
-    - ./app:/var/www
-    # Commande du batch
-    #command: composer install
-    #command: php bin/console --no-interaction doctrine:migrations:migrate -n
-    ports:
-      - "40:80"
-    links:
-      - mysql-solocal
-    # Database must be ready before running this searvice
-    depends_on:
-      - mysql-solocal
-    tty: true
-    networks:
-      - solocal
-
+      
   phpmyadmin-solocal:
     container_name: phpmyadmin-solocal
     image: phpmyadmin/phpmyadmin
@@ -57,6 +30,40 @@ services:
     restart: always
     environment:
       PMA_HOST: mysql-solocal
+      
+  symfony-solocal:
+    container_name: symfony-solocal
+    # php7.3
+    image: whatwedo/symfony4:v2.0
+    # php7.2
+    # image: whatwedo/symfony4
+    environment:
+        DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
+    volumes:
+    - ./app:/var/www
+    
+    #command: ["symfony console doctrine:migrations:migrate -n"]
+    # Commande du batch
+    #command: wait-for-it app-php72-db:3306 -t 30 -- /bin/oft db:migrate -n
+    #command: sh -c "composer install --no-interaction"
+    #command: php bin/console --no-interaction doctrine:migrations:migrate -n
+    #command: sh -c "symfony console doctrine:migrations:migrate -n"
+    ports:
+      - "40:80"
+    links:
+      - mysql-solocal
+    depends_on:
+      - mysql-solocal
+    tty: true
+    networks:
+      - solocal
+      
+  composer-solocal:
+    image: composer:1.9
+    command: ["composer", "install"]
+    volumes:
+      - ./app:/app
+      
 volumes:
   data:
 networks:
