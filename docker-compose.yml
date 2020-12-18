@@ -40,7 +40,7 @@ services:
     environment:
         DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
     volumes:
-    - ./app:/var/www
+    - ./back:/var/www
     
     #command: ["symfony console doctrine:migrations:migrate -n"]
     # Commande du batch
@@ -62,7 +62,17 @@ services:
     image: composer
     command: ["composer", "install"]
     volumes:
-      - ./app:/app
+      - ./back:/app
+      
+  node-solocal:
+    build:
+      context: .
+    ports:
+      - 4680:3000
+    volumes:
+      - ./front:/app
+      - /app/node_modules      
+    command: npm start      
       
 volumes:
   data:
