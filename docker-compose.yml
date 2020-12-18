@@ -59,7 +59,7 @@ services:
       - solocal
       
   composer-solocal:
-    image: composer:1.9
+    image: composer
     command: ["composer", "install"]
     volumes:
       - ./app:/app
