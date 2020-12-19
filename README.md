@@ -9,7 +9,7 @@
 1- git clone https://github.com/AdrienMOUSSAEI/solocal.git
 2- cd solocal
 3- docker-compose up -d
-4- docker-compose exec symfony-solocal php bin/console doctrine:schema:update --force
+4- docker-compose exec symfony-solocal php bin/console doctrine:migrations:migrate
 
 ```
 
