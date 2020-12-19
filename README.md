@@ -2,12 +2,6 @@
 
 `Solocal` est une application full stack, avec côté client une Single Page Application (React) et côté serveur (Symfony4).
 
-## Backe
-
-###### Symfony4
-###### Swagger
-
-
 #### Configuration de projet
 
 ```text
@@ -16,19 +10,36 @@
 2- cd solocal
 3- docker-compose up -d
 4- docker-compose exec symfony-solocal php bin/console doctrine:schema:update --force
-5- http://localhost:40/api
 
 ```
 
+## Backe
+
+###### Symfony4
+###### Swagger
+
+```text
+
+1- http://localhost:40/api
+
+```
+
+###### PhpMyAdmin
+
+```text
+
+1- http://localhost:41
+2- User: root
+3- Pass: solocal
+
+```
 
 ## Front
 
 ###### React
 
-#### Configuration de projet
-
 ```text
 
-1- npm start
+1- http://localhost:4680/
 
 ```
