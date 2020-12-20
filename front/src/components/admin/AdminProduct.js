@@ -10,6 +10,7 @@ super(props)
 this.state={ 
     modalStatus:false,
     id:0,
+    file: null,
     products : [],
     page : 1,
     searchWord:"",
@@ -18,13 +19,15 @@ this.state={
     loading_delete : false,
     loading_edit : false,
     loading_add : false,
+    loading_upload:false,
 
-    newProduct:{title:"",description:"",price:0,size:"",color:"",category:"",subCategory:"",note:0,creationDate:"2020-12-16T14:17:01.755Z",image:"",additionalProp1:{}},
+    newProduct:{imageFile:"",  title:"",description:"",price:0,size:"",color:"",category:"",subCategory:"",note:0,creationDate:"2020-12-16T14:17:01.755Z",image:"",additionalProp1:{}},
     
 
   
 
 }
+this.uploadFile  = this.uploadFile.bind(this)
     }
 
 
@@ -34,8 +37,79 @@ componentDidMount(){
 
  
 
-
  
+ 
+  uploadFile(event) {
+
+    var file=event.target.files[0];
+    this.setState({
+        file: URL.createObjectURL(file),
+        loading_upload : true
+      })
+
+      var data = new FormData()
+      data.append('file', file,file.name)
+     // data.append('user', 'hubot')
+    
+  // console.log(JSON.stringify(this.state.newProduct));
+   const requestOptions = {
+       method: 'POST',
+      // headers: { 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryGnSoDmW1sWOsk4pE' },
+       body: data
+   };
+  
+   var host="http://localhost:40/";
+   fetch(`http://localhost:40/api/uploads_photos`,requestOptions)
+       .then(response => response.json())
+       .then(json => {
+
+       // console.log( json["@id"]);
+
+       // console.log( json.contentUrl);
+
+        // console.log(JSON.stringify(json));
+
+            if(this.state.id>0)  //Edit
+            {
+                    
+                
+                this.setState({loading_upload : false});
+                this.setImage(host+json.contentUrl);
+                //this.editProduct(this.state.id);
+            }
+            else  //Add
+             {
+            this.setState({
+                loading_upload : false,
+                id : -1,
+                newProduct:{
+                 title:"",
+                 price:0,
+                 size:"",
+                 color:"",
+                 description:"",             
+                 category:"",
+                 subCategory:"",
+                 note:1,
+                 creationDate:"2020-12-16T14:17:01+01:00",
+                 image:host+json.contentUrl
+                 //additionalProp1:{}
+        
+                }
+               });
+           }
+
+          
+           
+           //this.closeModal();
+
+        //   this.getProductRequest();
+         
+       })
+       .catch(error => {     this.getProductRequest();        this.closeModal();
+        console.log(error)})
+}
+
  
  
 getProductRequest() {
@@ -46,6 +120,9 @@ getProductRequest() {
    // let searchWord=this.props.searchWord;
 //this.state.title
     //http://localhost:40/api/products?page=1
+
+ 
+
 
     fetch(`http://localhost:40/api/products?page=${page}&title=${searchWord}`)
         .then(response => response.json())
@@ -68,6 +145,35 @@ getProductRequest() {
         })
         .catch(error => console.log(error))
 }
+
+
+
+clearState(){
+    this.setState({
+        
+        id : -1,
+        file: null,
+        loading_delete : false,
+    loading_edit : false,
+    loading_add : false,
+    loading_upload:false,
+        newProduct:{
+         title:"",
+         price:0,
+         size:"",
+         color:"",
+         description:"",                
+         category:"",
+         subCategory:"",
+         note:0,
+         creationDate:"2020-12-16T14:17:01+01:00",
+         image:"",
+         additionalProp1:{}
+
+        }
+    });
+}
+
 
 
 addProduct() {
@@ -117,10 +223,15 @@ addProduct() {
 }
 
 
-prepareEditProduct(id,title,price,size,color,description,category){
+prepareEditProduct(image,id,title,price,size,color,description,category,note){
 
     this.setState({
         id : id,
+        file: null,
+        loading_delete : false,
+    loading_edit : false,
+    loading_add : false,
+    loading_upload:false,
         newProduct:{
          title:title,
          price: parseFloat(price) ,
@@ -129,8 +240,9 @@ prepareEditProduct(id,title,price,size,color,description,category){
          description:description,
          category:category,
          subCategory:"",
-         note:0,creationDate:"2020-12-16T14:17:01.755Z",
-         image:"",
+         note:note,
+         creationDate:"2020-12-16T14:17:01.755Z",
+         image:image,
          additionalProp1:{}
 
         }
@@ -194,6 +306,15 @@ editProduct(id) {
 
 
 deleteProduct(id) {
+
+    if(window.confirm("Are you sure you want to delete ?")==false)
+    {
+        return false;
+
+    }
+
+
+
      this.setState({
         loading_delete : true
     });
@@ -235,11 +356,27 @@ deleteProduct(id) {
 
 
 
+
+
+renderLoading_upload(){
+    
+    if(this.state.loading_upload)
+    {
+        return(<span  className="loading">file uploading . please wait...</span>)
+    }
+    else{
+        return(<span></span>)
+    }
+
+}
+
+
+
 renderLoading_edit(){
     
         if(this.state.loading_edit)
         {
-            return(<span  className="loading">editing.....</span>)
+            return(<span  className="loading">Editing... please wait...</span>)
         }
         else{
             return(<span></span>)
@@ -251,7 +388,7 @@ renderLoading_delete(){
     
     if(this.state.loading_delete)
     {
-        return(<span  className="loading">removing.....</span>)
+        return(<span  className="loading">Removing.... please wait....</span>)
     }
     else{
         return(<span></span>)
@@ -263,7 +400,7 @@ renderLoading_add(){
     
     if(this.state.loading_add)
     {
-        return(<span  className="loading">Adding.....</span>)
+        return(<span  className="loading">Adding.... please wait....</span>)
     }
     else{
         return(<span></span>)
@@ -283,6 +420,33 @@ renderLabel(){
 
 }
 
+renderSubmitOrAddBtn(){
+    
+    if(this.state.id>0)
+    {
+        return( 
+        <input className="btnSubmitNewProduct"  type="button" onClick={()=> this.editProduct(this.state.id)} value="Submit Edit" ></input>
+)
+    }
+    else{
+        return(<input className="btnSubmitNewProduct" type="button" onClick={()=> this.addProduct()} value="ADD New Product" ></input>)
+    }
+
+}
+
+
+
+
+
+
+setImage(val){
+    this.setState(prevState => ({
+        newProduct: {                  
+            ...prevState.newProduct,    
+            image: val    
+        }
+    }))
+}
 
 
 setTitle(val){
@@ -290,6 +454,14 @@ setTitle(val){
         newProduct: {                  
             ...prevState.newProduct,    
             title: val    
+        }
+    }))
+}
+setNote(val){
+    this.setState(prevState => ({
+        newProduct: {                  
+            ...prevState.newProduct,    
+            note: parseInt(val)     
         }
     }))
 }
@@ -342,6 +514,29 @@ closeModal(){
     this.setState({modalStatus:false});
     }
 
+    renderImgUp(){
+            if(this.state.file!=null)
+            {
+                return(
+                    <img src={this.state.file}  className="productImg"  ></img>                
+                )
+            }
+            else if(this.state.newProduct.image!="")
+            {
+                return(
+                    <img src={this.state.newProduct.image}  className="productImg"  ></img>                
+                )
+            }
+            else 
+            {
+                return(
+                    <img src={noPic}  className="productImg"  ></img>                
+                )
+            }
+
+
+       
+    }
  renderNewBox()
  {
      if(this.state.modalStatus)
@@ -354,34 +549,56 @@ closeModal(){
                        
                        <div>{this.renderLabel()}</div>
 
-                      <div>
-                      <img src={noPic}  className="productImg"  ></img>
+                      <div className="uploadImageCan">
 
+                      {this.renderImgUp()}
+
+                       <input className="fileUpload" type="file" onChange={this.uploadFile}/>
+                      {this.renderLoading_upload()}
                       </div>
                       
-                      <div> 
+                      <div className="formInputCan"> 
+                          <span  className="formInputLabel">title</span>
                       <input type="text" className="formInputText" value={this.state.newProduct.title} onChange={(event)=>this.setTitle(event.target.value)}  placeholder="product name"></input>
               
                       </div>
               
-                      <div> 
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">price</span>
+
                       <input type="number" className="formInputText"  value={this.state.newProduct.price} onChange={(event)=>this.setPrice(event.target.value)}  placeholder="product price"></input>
               
                       </div>
               
-                      <div> 
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">note</span>
+
+                      <input type="number" className="formInputText"  value={this.state.newProduct.note} onChange={(event)=>this.setNote(event.target.value)}  placeholder="product note"></input>
+              
+                      </div>
+
+
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">color</span>
+
                       <input type="text" className="formInputText"  value={this.state.newProduct.color} onChange={(event)=>this.setColor(event.target.value)}  placeholder="product color"></input>
               
                       </div>
-                      <div> 
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">size</span>
+
                       <input type="text" className="formInputText"  value={this.state.newProduct.size} onChange={(event)=>this.setSize(event.target.value)}  placeholder="product size"></input>
               
                       </div>
-                      <div> 
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">category</span>
+
                       <input type="text" className="formInputText"  value={this.state.newProduct.category} onChange={(event)=>this.setCategory(event.target.value)}  placeholder="category"></input>
               
                       </div>
-                      <div> 
+                      <div className="formInputCan"> 
+                      <span className="formInputLabel">description</span>
+
                       <textarea type="text" className="formInputText"  value={this.state.newProduct.description}  onChange={(event)=>this.setDescription(event.target.value)}  placeholder="description">
                         
                         </textarea>
@@ -390,10 +607,9 @@ closeModal(){
                      
               
                       <div className="flexRowSpace">
-                      <input type="button" onClick={()=> this.addProduct()} value="ADD New Product" ></input>
-                        <input type="button" onClick={()=> this.editProduct(this.state.id)} value="Submit Edit" ></input>
-              
-                        <input type="button" onClick={()=> this.closeModal()} value="Close" ></input>
+                          {this.renderSubmitOrAddBtn()}
+                     
+                        <input className="btnCloseBox" type="button" onClick={()=> this.closeModal()} value="Close" ></input>
           
                     </div>
                        
@@ -432,7 +648,7 @@ render(){
       if(loading)
       {
           return(
-<div className="loading">Loading...</div>
+<div className="loading">Products Loading... . please wait...</div>
 
           )
       }
@@ -444,7 +660,7 @@ render(){
                     <input type="text" className="searchTxt" value={this.state.searchWord} onChange={(event)=>this.setState({searchWord:event.target.value})}  placeholder="search word"></input>
                    <input type="button" className="searchBtn" onClick={()=> this.getProductRequest()} value="search" ></input>
                 
-                   <input type="button" className="newProductBtn" onClick={()=> this.openModal()} value="Add New Product" ></input>
+                   <input type="button" className="newProductBtn" onClick={()=> {this.clearState(); this.openModal()}} value="Add New Product" ></input>
 
                 
                 </div>
@@ -452,26 +668,41 @@ render(){
      
     <div className="productListCan">
               {products.map(item => (
+                  
                   <div id={item.id} className="productItem" > 
 
-<img src={noPic}></img>
+                       <div className="productPicCan" >
+                       <img className="productPic" src={item.image==""? noPic:item.image}></img>
 
-<h2>
-                   {item.title}
+                       </div>
+
+
+
+<h2 className="h2ProductTitle">
+                <span className="label0">title:</span>   {item.title}
                 </h2>
                 <h3>
+                <span className="label0">price:</span>
                    {item.price} $
                 </h3>
+                <h4>
+                <span className="label0">note:</span>
+                   {item.note} 
+                </h4>
+
+                <h6><span className="label0">category:</span>{item.category}</h6>
 
                 <div className="flexRowSpace">
-<span>{item.color}</span>
-<span>{item.size}</span>
-<span>{item.category}</span>
+                <span><span className="label0">color:</span>{item.color}</span>
+<span><span className="label0"> size:</span>{item.size}</span>
 
 
                 </div>
                  <div className="flexRowSpace">
-                 <input type="button" className="editProductBtn" onClick={()=> {this.openModal(); this.prepareEditProduct(item.id,item.title,item.price,item.size,item.color,item.description,item.category)}} value="edit" ></input>
+
+                    
+                 <input type="button" className="editProductBtn" onClick={()=> {this.openModal(); this.prepareEditProduct(item.image, item.id,item.title,item.price,item.size,item.color,item.description,item.category,item.note)}} value="edit" ></input>
+                
                 <input type="button" className="deleteProductBtn" onClick={()=> this.deleteProduct(item.id)} value="delete" ></input>
              
                 </div>

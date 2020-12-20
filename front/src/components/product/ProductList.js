@@ -36,7 +36,7 @@ openModal(){
         }
     
 
-prepareDetailsProduct(id,title,price,size,color,note,description,category){
+prepareDetailsProduct(image, id,title,price,size,color,note,description,category){
 
     this.setState({
         id : id,
@@ -50,7 +50,7 @@ prepareDetailsProduct(id,title,price,size,color,note,description,category){
          subCategory:"",
          note:note,
          creationDate:"2020-12-16T14:17:01.755Z",
-         image:"",
+         image:image,
          additionalProp1:{}
 
         }
@@ -70,6 +70,8 @@ getProductRequest() {
    // let searchWord=this.props.searchWord;
 //this.state.title
     //http://localhost:40/api/products?page=1
+
+ 
 
     fetch(`http://localhost:40/api/products?page=${page}&title=${searchWord}`)
         .then(response => response.json())
@@ -106,44 +108,44 @@ renderDetailsBox()
                        
 
                       <div>
-                      <img src={noPic}  className="productImg"  ></img>
+                      <img src={this.state.newProduct.image!=""?this.state.newProduct.image: noPic}  className="productImg"  ></img>
 
                       </div>
                       
-                      <div> 
+                      <div  className="formInputCan"> 
                           <span className="label0">title : </span>
                           <span>{this.state.newProduct.title}</span>
                    
                       </div>
               
-                      <div> 
+                      <div  className="formInputCan"> 
                       <span className="label0">note : </span>
                           <span>{this.state.newProduct.note}</span>
                       
                       </div>
 
-                      <div> 
+                      <div  className="formInputCan"> 
                       <span className="label0">price : </span>
                           <span>{this.state.newProduct.price}</span>
                       
                       </div>
               
-                      <div> 
+                      <div  className="formInputCan"> 
                       <span className="label0">color : </span>
                           <span>{this.state.newProduct.color}</span>
                
                       </div>
-                      <div> 
+                      <div  className="formInputCan"> 
                       <span className="label0">size : </span>
                           <span>{this.state.newProduct.size}</span>
                   
                       </div>
-                      <div> 
+                      <div className="formInputCan"> 
                       <span className="label0">category : </span>
                           <span>{this.state.newProduct.category}</span>
                        
                       </div>
-                      <div> 
+                      <div className="formInputCan"> 
                       <span className="label0">description : </span>
                           <span>{this.state.newProduct.description}</span>
                       
@@ -205,9 +207,11 @@ render(){
               {products.map(item => (
                   <div id={item.id} className="productItem" > 
 
-<img src={noPic}></img>
+<div className="productPicCan" >
+                       <img className="productPic" src={item.image==""? noPic:item.image}></img>
 
-<h2>
+                       </div>
+<h2 className="h2ProductTitle">
                 <span className="label0">title:</span>   {item.title}
                 </h2>
                 <h3>
@@ -218,15 +222,16 @@ render(){
                 <span className="label0">note:</span>
                    {item.note} 
                 </h4>
+                <h6><span className="label0">category:</span>{item.category}</h6>
+
                 <div className="flexRowSpace">
 <span><span className="label0">color:</span>{item.color}</span>
-<span><span className="label0"> size:</span>{item.size}</span>
-<span><span className="label0">category:</span>{item.category}</span>
-
+<span><span className="label0">size:</span>{item.size}</span>
+ 
 
                 </div>
                 <div>
-                <input type="button" className="editProductBtn" onClick={()=> {this.openModal(); this.prepareDetailsProduct(item.id,item.title,item.price,item.size,item.color,item.note,item.description,item.category)}} value="details" ></input>
+                <input type="button" className="editProductBtn" onClick={()=> {this.openModal(); this.prepareDetailsProduct(item.image, item.id,item.title,item.price,item.size,item.color,item.note,item.description,item.category)}} value="details" ></input>
                 </div>
              
 
