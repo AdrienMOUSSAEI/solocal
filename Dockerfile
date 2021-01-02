@@ -2,8 +2,8 @@ FROM node:10
  
 WORKDIR /usr/src/app
  
-COPY ./front/package*.json ./
+COPY ./frontReact/package*.json ./
  
 RUN npm install
  
-COPY ./front .
+COPY ./frontReact .
