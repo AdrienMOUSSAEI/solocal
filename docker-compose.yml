@@ -72,7 +72,18 @@ services:
     volumes:
       - ./frontReact:/app
       - /app/node_modules      
-    command: npm start      
+    command: npm start  
+    
+  angular_cli-solocal:
+    image: trion/ng-cli:latest
+    container_name: 'angular_cli-solocal'
+    volumes:
+      - ./frontAngular:/usr/app/
+    working_dir: /usr/app/
+    ports:
+      - 4200:4200
+    command: >
+      bash -c "npm install && ng serve --host 0.0.0.0"
       
 volumes:
   data:

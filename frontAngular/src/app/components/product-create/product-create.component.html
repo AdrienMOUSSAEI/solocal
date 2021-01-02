@@ -1,0 +1,76 @@
+<div style="width: 500px; margin: auto;">
+    <div class="submit-form">
+      <div *ngIf="!submitted">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            required
+            [(ngModel)]="product.title"
+            name="title"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="category">category</label>
+          <input
+            class="form-control"
+            id="category"
+            required
+            [(ngModel)]="product.category"
+            name="category"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label for="subCategory">subCategory</label>
+          <input
+            class="form-control"
+            id="subCategory"
+            required
+            [(ngModel)]="product.subCategory"
+            name="subCategory"
+          />
+        </div>
+        <div class="form-group">
+          <label for="description">description</label>
+          <input
+            class="form-control"
+            id="description"
+            required
+            [(ngModel)]="product.description"
+            name="description"
+          />
+        </div>
+        <div class="form-group">
+          <label for="price">price</label>
+          <input
+            class="form-control"
+            id="price"
+            required
+            [(ngModel)]="product.price"
+            name="price"
+          />
+        </div>
+        <div class="form-group">
+          <label for="note">note</label>
+          <input
+            class="form-control"
+            id="note"
+            required
+            [(ngModel)]="product.note"
+            name="note"
+          />
+        </div>
+        <button (click)="createProduct()" class="btn btn-success">Create</button>
+      </div>
+  
+      <div *ngIf="submitted">
+        <h3>You successfully created a product!</h3>
+        <button class="btn btn-success" (click)="newProduct()">New..</button>
+      </div>
+    </div>
+  </div>
+  

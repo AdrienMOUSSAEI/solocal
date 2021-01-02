@@ -1,0 +1,85 @@
+<div style="width: 500px; margin: auto;">
+    <div *ngIf="currentProduct" class="edit-form">
+      <h4>Product</h4>
+      <form>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              required
+              [(ngModel)]="currentProduct.title"
+              name="title"
+            />
+          </div>
+    
+          <div class="form-group">
+            <label for="category">category</label>
+            <input
+              class="form-control"
+              id="category"
+              required
+              [(ngModel)]="currentProduct.category"
+              name="category"
+            />
+          </div>
+    
+          <div class="form-group">
+            <label for="subCategory">subCategory</label>
+            <input
+              class="form-control"
+              id="subCategory"
+              required
+              [(ngModel)]="currentProduct.subCategory"
+              name="subCategory"
+            />
+          </div>
+          <div class="form-group">
+            <label for="description">description</label>
+            <input
+              class="form-control"
+              id="description"
+              required
+              [(ngModel)]="currentProduct.description"
+              name="description"
+            />
+          </div>
+          <div class="form-group">
+            <label for="price">price</label>
+            <input
+              class="form-control"
+              id="price"
+              required
+              [(ngModel)]="currentProduct.price"
+              name="price"
+            />
+          </div>
+          <div class="form-group">
+            <label for="note">note</label>
+            <input
+              class="form-control"
+              id="note"
+              required
+              [(ngModel)]="currentProduct.note"
+              name="note"
+            />
+          </div>        
+      </form>
+  
+      <button
+        type="submit"
+        class="badge badge-success"
+        (click)="updateProduct()"
+      >
+        Update
+      </button>
+      <p></p>
+    </div>
+  
+    <div *ngIf="!currentProduct">
+      <br />
+      <p>This product is not accessible</p>
+    </div>
+  </div>
+  
