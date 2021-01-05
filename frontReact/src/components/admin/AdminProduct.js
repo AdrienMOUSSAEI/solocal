@@ -23,9 +23,6 @@ this.state={
 
     newProduct:{imageFile:"",  title:"",description:"",price:0,size:"",color:"",category:"",subCategory:"",note:0,creationDate:"2020-12-16T14:17:01.755Z",image:"",additionalProp1:{}},
     
-
-  
-
 }
 this.uploadFile  = this.uploadFile.bind(this)
     }
@@ -35,9 +32,6 @@ componentDidMount(){
     this.getProductRequest();
  }
 
- 
-
- 
  
   uploadFile(event) {
 
@@ -49,33 +43,23 @@ componentDidMount(){
 
       var data = new FormData()
       data.append('file', file,file.name)
-     // data.append('user', 'hubot')
     
-  // console.log(JSON.stringify(this.state.newProduct));
+    // console.log(JSON.stringify(this.state.newProduct));
    const requestOptions = {
        method: 'POST',
-      // headers: { 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryGnSoDmW1sWOsk4pE' },
+    // headers: { 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryGnSoDmW1sWOsk4pE' },
        body: data
    };
   
-   var host="http://localhost:40/";
-   fetch(`http://localhost:40/api/uploads_photos`,requestOptions)
+   var host="http://localhost:40";
+   
+   fetch(`http://localhost:40/api/uploadsPhotos`,requestOptions)
        .then(response => response.json())
        .then(json => {
-
-       // console.log( json["@id"]);
-
-       // console.log( json.contentUrl);
-
-        // console.log(JSON.stringify(json));
-
             if(this.state.id>0)  //Edit
-            {
-                    
-                
+            {            
                 this.setState({loading_upload : false});
                 this.setImage(host+json.contentUrl);
-                //this.editProduct(this.state.id);
             }
             else  //Add
              {
@@ -93,17 +77,10 @@ componentDidMount(){
                  note:1,
                  creationDate:"2020-12-16T14:17:01+01:00",
                  image:host+json.contentUrl
-                 //additionalProp1:{}
         
                 }
                });
            }
-
-          
-           
-           //this.closeModal();
-
-        //   this.getProductRequest();
          
        })
        .catch(error => {     this.getProductRequest();        this.closeModal();
@@ -117,11 +94,9 @@ getProductRequest() {
     this.setState({
          loading : true
     });
-   // let searchWord=this.props.searchWord;
-//this.state.title
+    // let searchWord=this.props.searchWord;
+    //this.state.title
     //http://localhost:40/api/products?page=1
-
- 
 
 
     fetch(`http://localhost:40/api/products?page=${page}&title=${searchWord}`)
@@ -723,31 +698,9 @@ render(){
               
             </div>
 
-
-
-    
-    
-    
         )
     
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
+    }
+    
 }

@@ -73,7 +73,7 @@ class UploadsPhotos
      * @var File|null
      *
      * @Assert\NotNull(groups={"media_object_create"})
-     * @Vich\UploadableField(mapping="media_object", fileNameProperty="filePath")
+     * @Vich\UploadableField(mapping="uploads_Photos", fileNameProperty="filePath")
      */
     public $file;
 

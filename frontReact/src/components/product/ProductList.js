@@ -67,8 +67,8 @@ getProductRequest() {
     this.setState({
          loading : true
     });
-   // let searchWord=this.props.searchWord;
-//this.state.title
+    // let searchWord=this.props.searchWord;
+    //this.state.title
     //http://localhost:40/api/products?page=1
 
  
@@ -248,31 +248,10 @@ render(){
 
             </div>
 
-
-
-    
-    
-    
         )
     
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
+    }
 
 }
