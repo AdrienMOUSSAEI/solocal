@@ -25,7 +25,7 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         articles:
             pattern: ^/api/articles
-            methods: [POST, PUT, PATCH, DELETE]
+            methods: [DELETE]
             stateless: true
             guard:
                 authenticators:
@@ -44,4 +44,4 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/api/articles, roles: IS_AUTHENTICATED_FULLY, methods: [POST, PUT, PATCH, DELETE] }
+         - { path: ^/api/articles, roles: IS_AUTHENTICATED_FULLY, methods: [DELETE] }
