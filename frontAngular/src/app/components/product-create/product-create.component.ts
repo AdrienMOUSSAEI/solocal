@@ -27,7 +27,7 @@ export class ProductCreateComponent implements OnInit {
     this.mediaService.create(this.selectedFile, this.selectedFile.name)
       .subscribe(re => {
         data.imageFile=re["@id"];
-        data.image=re["@id"];
+        data.image=re["contentUrl"];
         data.creationDate=this.mediaService.formatDate();
         data.additionalProp1={};
         this.productService.create(data)
