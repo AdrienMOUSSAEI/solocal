@@ -41,6 +41,7 @@ services:
         DATABASE_URL: mysql://solocal:solocal@mysql-solocal:3306/solocal?serverVersion=5.7
     volumes:
     - ./back:/var/www
+    - ./back/nginx/:/etc/nginx/
     
     #command: ["symfony console doctrine:migrations:migrate -n"]
     # Commande du batch
